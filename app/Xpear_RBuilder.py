@@ -1,0 +1,124 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Oct 13 20:19:46 2023
+
+@author: Steve
+"""
+
+import streamlit as st
+from pathlib import Path
+from PIL import Image
+
+# --- PATH SETTINGS ---
+current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
+css_file = current_dir / "styles" / "main.css"
+resume_file = current_dir / "assets" / "CV.pdf"
+profile_pic = current_dir / "assets" / "profile-pic.jpg"
+
+# Initialize session state
+if 'show_resume' not in st.session_state:
+    st.session_state.show_resume = False
+
+# --- GENERAL SETTINGS ---
+st.set_page_config(page_title="Digital CV", page_icon=":wave:")
+
+# Page 1: User Input
+if not st.session_state.show_resume:
+    st.header("Page 1: User Input")
+    
+    
+    if "name" not in st.session_state:
+        st.session_state["name"] = ""
+    # User Input: Personal Information
+    name = st.text_input("Full Name")
+    
+    
+    if "description" not in st.session_state:
+        st.session_state["description"] = ""
+    description = st.text_area("Description", height=3)
+    
+    
+    if "email" not in st.session_state:
+        st.session_state["email"] = ""
+    email = st.text_input("Email")
+    
+    
+    
+    
+    linkedin = st.text_input("LinkedIn Profile (Optional)")
+
+    # User Input: Social Media Links
+    st.subheader("Social Media Links")
+    
+    if "social_media" not in st.session_state:
+        st.session_state["social_media"] = ""
+    
+    social_media = {}
+    for platform in ["YouTube", "LinkedIn", "GitHub", "Twitter"]:
+        link = st.text_input(platform)
+        if link:
+            social_media[platform] = link
+
+    # User Input: Projects & Accomplishments
+    st.subheader("Projects & Accomplishments")
+    
+    if "projects" not in st.session_state:
+        st.session_state["projects"] = ""
+    
+    projects = {}
+    project_count = st.number_input("Number of Projects", min_value=1, max_value=10, step=1)
+    for i in range(project_count):
+        project_name = st.text_input(f"Project {i + 1} Name")
+        project_link = st.text_input(f"Project {i + 1} Link")
+        if project_name and project_link:
+            projects[project_name] = project_link
+
+    # User Input: Experience & Qualifications
+    st.header("Experience & Qualifications")
+    if "experience_qualifications_list" not in st.session_state:
+        st.session_state["experience_qualifications_list"] = ""
+    
+    experience_qualifications = st.text_area("Enter your experience and qualifications, one per line")
+    experience_qualifications_list = [entry.strip() for entry in experience_qualifications.split('\n') if entry]
+
+    # User Input: Hard Skills
+    st.header("Hard Skills")
+    if "hard_skills_list" not in st.session_state:
+        st.session_state["hard_skills_list"] = ""
+    
+    hard_skills = st.text_area("Enter your hard skills, one per line")
+    hard_skills_list = [skill.strip() for skill in hard_skills.split('\n') if skill]
+
+    # User Input: Work History
+    st.header("Work History")
+    if "work_history_list" not in st.session_state:
+        st.session_state["work_history_list"] = ""
+    
+    
+    
+    work_history = st.text_area("Enter your work history, in brief")
+    work_history_list = [workh.strip() for workh in work_history.split('\n') if workh]
+
+    # "Build My Resume" Button
+    if st.button("Build My Resume"):
+        st.session_state.show_resume = True
+        
+        
+
+# Page 2: Display Resume
+if st.session_state.show_resume:
+    st.write("Your Resume is ready to view on the Resume tab")
+    
+    st.session_state["name"] = name
+    st.session_state["description"] = description
+    st.session_state["email"] = email
+    st.session_state["social_media"] = social_media
+    st.session_state["experience_qualifications_list"] = experience_qualifications_list
+    st.session_state["hard_skills_list"] = hard_skills_list
+    st.session_state["work_history_list"] = work_history_list
+    st.session_state["projects"] = projects
+    
+    
+    
+
+   
